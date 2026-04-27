@@ -49,8 +49,10 @@ class Player(CircleShape):
                 self.accel -= PLAYER_ACCEL * dt
 
         if keys[pygame.K_s]:
-            self.accel += dt
-
+            if self.accel < 0:
+                self.accel += PLAYER_ACCEL * dt * 1.5
+            elif self.accel > 0:
+                self.accel += PLAYER_ACCEL * dt
         # stopping feels bad if equal to speeding up
         if keys[pygame.K_w]:
             self.accel -= PLAYER_ACCEL * dt

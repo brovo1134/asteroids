@@ -6,6 +6,7 @@ from asteroidfield import AsteroidField
 from asteroids import Asteroid
 from circleshape import CircleShape
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from font import Font
 from logger import log_event, log_state
 from player import Player
 from shot import Shot
@@ -15,6 +16,7 @@ def main():
     pygame.init()
     clock = pygame.time.Clock()
     dt = 0
+
     print(f"Starting Asteroids with pygame version:{pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
@@ -24,7 +26,9 @@ def main():
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
-
+    score = 0
+    Font.containers = drawable
+    font = Font(36)
     Shot.containers = (shots, updatable, drawable)
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
@@ -50,8 +54,12 @@ def main():
                     log_event("asteroid_shot")
                     shot.kill()
                     asteroid.split()
+                    score += 1
         for draw in drawable:
-            draw.draw(screen)
+            if draw == font:
+                draw.draw(screen, f"SCORE: {score}")
+            else:
+                draw.draw(screen)
         player.draw(screen)
         pygame.display.flip()
         dt = clock.tick(60) / 1000
